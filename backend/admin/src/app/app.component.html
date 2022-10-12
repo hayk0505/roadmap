@@ -1,14 +1,40 @@
 <section class="form-container">
-  <form class="form" [formGroup]="form" #contentForm="ngForm"
-  (ngSubmit)="onSubmit(contentForm)">
+  <section class="sidebar">
+    <div class="logo">
+      <a class="simple-text logo-normal" href=""> Headings </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <ul class="nav">
+          <li 
+          *ngFor="let subsection of subsections"
+          routerlinkactive="active"
+          class="nav-item active"
+          (click)="clickOnSubsection(subsection.name)">
+              <a href="#/dashboard">
+                  <i class="fa-brands fa-think-peaks"></i>
+              <p>{{subsection.name}}</p>
+          </a>
+          </li>
+      </ul>
+    </div>
+  </section>
+  
+  <form class="form" 
+    [formGroup]="form"
+    #contentForm="ngForm"
+    (ngSubmit)="onSubmit(contentForm)">
     <div class="title center">Frontend roadmap admin</div>
     <div class="subtitle center">Let's add some new content!</div>
     <div class="input-container ic1">
+      <select #selectedSection name="" id="" (change)="selectedSectionChange(selectedSection.value, selectedSection.selectedIndex)">
+        <option value="select section name">select section name</option>
+        <option *ngFor="let item of contentNameAndId" id="{{item.id}}" value="{{item.sectionName}}">{{item.sectionName}}</option>
+      </select>
       <input formControlName="sectionName" id="sectionName" class="input" type="text" placeholder=" " />
       <div class="cut"></div>
       <label for="sectionName" class="placeholder">Sectiion Name</label>
     </div>
-    <div class="input-container ic2">
+    <div class="input-container ic2" *ngIf="form.controls['sectionName']?.value">
       <input formControlName="subsectionName" id="subsectionName" class="input" type="text" placeholder=" " />
       <div class="cut"></div>
       <label for="subsectionName" class="placeholder">Subsection name</label>
@@ -22,3 +48,4 @@
     <button type="submit" class="submit">submit</button>
   </form>
 </section>
+

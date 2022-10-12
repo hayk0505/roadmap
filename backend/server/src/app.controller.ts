@@ -19,4 +19,12 @@ export class AppController {
     const res = await this.nameName.findAll();
     return res as any;
   }
+
+  @Get(['getContentByName'])
+  async getContentByName(): Promise<Content> {
+    const res = await this.nameName.findAll({
+      attributes: ['sectionName', 'id']
+    });
+    return res as any;
+  }
 }

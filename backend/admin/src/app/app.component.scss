@@ -3,7 +3,7 @@
     height: 100vh;
     background-color: #15172b;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 body {
     align-items: center;
@@ -19,7 +19,7 @@ body {
     box-sizing: border-box;
     height: 500px;
     padding: 20px;
-    width: 90%;
+    width: calc(90% - 230px);
   }
   
   .title {
@@ -137,4 +137,95 @@ body {
   .center {
     text-align: center;
   }
+  .nav {
+    display: block;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.nav p {
+    margin: 0;
+    line-height: 30px;
+    position: relative;
+    display: block;
+    height: auto;
+    white-space: nowrap;
+    color: rgba(255,255,255,.8);
+    font-weight: 300;
+}
+
+.nav li>a {
+    margin: 10px 15px 0;
+    border-radius: 30px;
+    color: #fff;
+    display: block;
+    text-decoration: none;
+    position: relative;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: .62475rem;
+    padding: 10px 8px;
+    line-height: 1.625rem;
+}
+
+.nav li.active>a:not([data-toggle=collapse]):before {
+    content: " ";
+    position: absolute;
+    height: 6px;
+    width: 6px;
+    top: 22px;
+    left: -4px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.nav i {
+    font-size: 20px;
+    float: left;
+    margin-right: 12px;
+    line-height: 30px;
+    width: 34px;
+    text-align: center;
+    color: rgba(255,255,255,.8);
+    position: relative;
+}
+
+.simple-text {
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    display: block;
+    white-space: nowrap;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem 0.7rem;
+    z-index: 4;
+}
+
+.sidebar {
+  height: calc(100vh - 90px);
+  width: 230px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+  box-shadow: 0 0 45px 0 rgb(0 0 0 / 60%);
+  margin-top: 80px;
+  margin-left: 20px;
+  border-radius: 5px;
+  background: linear-gradient(0deg,#ec250d 0,#fd5d93 100%);
+  transition: .5s cubic-bezier(.685,.0473,.346,1);
+}
   

@@ -12,6 +12,8 @@ import { Observable } from 'rxjs/internal/Observable';
 
 export class AppComponent implements OnInit {
   title = 'admin';
+  subsections: Array<any> = [];
+  contentNameAndId: Array<Partial<ContentCration>> = [];
   constructor(
     private http: HttpClient,
   ) { }
@@ -19,6 +21,8 @@ export class AppComponent implements OnInit {
   public disableForm: boolean = false;
 
   async ngOnInit() {
+    this.subsections = [ { name: 'dns', parentId: null, childs: [] }, { name: 'ci/cd' },{ name: 'kubernetis' },{ name: 'docker' }];
+    
     this.form = new FormGroup({
       sectionName: new FormControl('', [
         Validators.required,
@@ -33,6 +37,10 @@ export class AppComponent implements OnInit {
         Validators.minLength(6),
       ]),
     });
+
+    this.getContentNameAndId().subscribe((data: any) => {
+      this.contentNameAndId = data;
+    })
   }
   
   onSubmit(form: any): void {
@@ -40,6 +48,7 @@ export class AppComponent implements OnInit {
       this.form.enable();
     } else {
       this.disableForm = true;
+
       this.updateProfileInfo(this.form.value)
       .pipe(
         tap(
@@ -59,12 +68,29 @@ export class AppComponent implements OnInit {
     }
     console.log(form);
   }
+
+  clickOnSubsection (name: string): void {
+    //this.form.patchValue({sectionName: name})
+  }
+
+  selectedSectionChange(selected: any, selectedid: any): void {
+    console.log(selectedid);
+    console.log(selected);
+    this.form.patchValue({parentId: this.contentNameAndId[selectedid - 1].id});
+  }
+
   updateProfileInfo(data: ContentCration): Observable<any> {
     const userUpdateUrl = `http://localhost:3000/content/create`;
     let headers = new HttpHeaders();
-    //headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('Access-Control-Allow-Origin', '*');
     return this.post(userUpdateUrl, data, null, headers);
+  }
+
+  getContentNameAndId(): Observable<Partial<ContentCration>> {
+    const userUpdateUrl = `http://localhost:3000/content/getContentByName`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Access-Control-Allow-Origin', '*');
+    return this.get(userUpdateUrl);
   }
 
   post<T>(url: string, data: any, params?: any, headers?: any, observe?: 'body', reportProgress?: boolean): Observable<T>;
@@ -108,6 +134,41 @@ export class AppComponent implements OnInit {
     );
     
   }
+
+  get<T>(url: string, params?: any, headers?: any, observe?: 'body', reportProgress?: boolean): Observable<T>;
+  get<T>(url: string, params?: any, headers?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<T>>;
+  get<T>(url: string, params?: any, headers?: any, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    const httpHeaders = {} as any;
+    if (headers) {
+      headers.forEach((h: any) => {
+        httpHeaders[h.name] = h.value;
+      });
+    }
+
+    let options = {
+      headers: httpHeaders,
+      observe: observe,
+      reportProgress: reportProgress,
+    };
+    if (params) {
+      options = Object.assign(params, options);
+    }
+
+    return this.http.get<T>(url, options).pipe(
+      catchError(this.onCatch),
+      tap(
+        res => {
+          this.onSuccess(res);
+        },
+        error => {
+          this.onError(error);
+        }
+      ),
+      finalize(() => {
+        this.onEnd();
+      })
+    );
+  }
   private onCatch<T>(error: any, caught: Observable<T>): Observable<T> {
     return throwError(error);
   }
@@ -130,5 +191,6 @@ interface ContentCration {
   id: number;
   sectionName: string;
   subsectionName: string;
-  Content: string;
+  content: string;
+  parentId: number;
 }

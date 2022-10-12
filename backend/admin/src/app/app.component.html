@@ -1,0 +1,24 @@
+<section class="form-container">
+  <form class="form" [formGroup]="form" #contentForm="ngForm"
+  (ngSubmit)="onSubmit(contentForm)">
+    <div class="title center">Frontend roadmap admin</div>
+    <div class="subtitle center">Let's add some new content!</div>
+    <div class="input-container ic1">
+      <input formControlName="sectionName" id="sectionName" class="input" type="text" placeholder=" " />
+      <div class="cut"></div>
+      <label for="sectionName" class="placeholder">Sectiion Name</label>
+    </div>
+    <div class="input-container ic2">
+      <input formControlName="subsectionName" id="subsectionName" class="input" type="text" placeholder=" " />
+      <div class="cut"></div>
+      <label for="subsectionName" class="placeholder">Subsection name</label>
+    </div>
+    <div class="textarea-container ic2">
+      <!-- <input id="email" class="input" type="text" placeholder=" " /> -->
+      <textarea formControlName="content" class="input" name="" id="textarea" cols="30" rows="10" placeholder=" "></textarea>
+      <div class="cut"></div>
+      <label for="textarea" class="placeholder">Content</label>
+    </div>
+    <button type="submit" class="submit">submit</button>
+  </form>
+</section>

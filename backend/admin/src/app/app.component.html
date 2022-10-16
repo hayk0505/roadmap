@@ -4,21 +4,35 @@
       <a class="simple-text logo-normal" href=""> Headings </a>
     </div>
     <div class="sidebar-wrapper">
-      <ul class="nav">
-          <li 
-          *ngFor="let subsection of subsections"
-          routerlinkactive="active"
-          class="nav-item active"
-          (click)="clickOnSubsection(subsection.name)">
-              <a href="#/dashboard">
-                  <i class="fa-brands fa-think-peaks"></i>
-              <p>{{subsection.name}}</p>
-          </a>
-          </li>
-      </ul>
+      <ng-container *ngTemplateOutlet="tree;context:{node:node}"></ng-container>
+      <ng-template #tree let-node="node">
+        <div class="cataloggroup desctop">
+          <ul class="cataloggroup-items">
+            <li [attr.data-id]="child.id" 
+            [attr.data-name]="child.sectionName"
+            id='label{{child.id}}'
+            class="tab-menu m-0"
+            (click)="selectFromMenu(child.id)"
+            *ngFor="let child of node; let itemindex=index"
+            [ngClass]="{'hidden': child.parentId !== null}"
+            >
+              <label for="radio{{itemindex}}" [ngClass]="{'hasChilds' : child?.children?.length > 0 }" class="m-0">
+                <a class="nestedGroup"
+                  title="{{child.sectionName}}">
+                  {{child.sectionName}}
+                </a>
+                <i [attr.data-parentId]="child.id" [attr.data-parentName]="child.sectionName" *ngIf="child?.children?.length > 0"
+                  class="fa fa-angle-right" id="{{child.id}}" >
+                </i>
+              </label>
+              <ng-container *ngTemplateOutlet="tree;context:{node:child.children}"></ng-container>
+            </li>
+          </ul>
+        </div>
+      </ng-template>
     </div>
   </section>
-  
+
   <form class="form" 
     [formGroup]="form"
     #contentForm="ngForm"
@@ -26,21 +40,27 @@
     <div class="title center">Frontend roadmap admin</div>
     <div class="subtitle center">Let's add some new content!</div>
     <div class="input-container ic1">
-      <select #selectedSection name="" id="" (change)="selectedSectionChange(selectedSection.value, selectedSection.selectedIndex)">
-        <option value="select section name">select section name</option>
-        <option *ngFor="let item of contentNameAndId" id="{{item.id}}" value="{{item.sectionName}}">{{item.sectionName}}</option>
-      </select>
-      <input formControlName="sectionName" id="sectionName" class="input" type="text" placeholder=" " />
-      <div class="cut"></div>
-      <label for="sectionName" class="placeholder">Sectiion Name</label>
     </div>
-    <div class="input-container ic2" *ngIf="form.controls['sectionName']?.value">
+    <div class="input-container ic1 drop-down-container">
+      <input type="text" class="input" placeholder=" " formControlName="sectionName" #selectedSection (change)="selectedSectionChange()">
+      <div class="cut"></div>
+      <label for="subsectionName" class="placeholder">Section name</label>
+      <button type="button" class="drop-down-btn" (click)="sectionDropDown()"><i class="fa-solid fa-chevron-down"></i></button>
+    </div>
+    <div class="drop-down" [ngClass]="{'drop-down-open' : isOpenDropDawn }">
+      <ul>
+        <li 
+        *ngFor="let item of contentNameAndId"
+        id="{{item.id}}"
+        value="{{item.sectionName}}" (click)="selectedSectionUpdate(item.sectionName, item.id)">{{item.sectionName}}</li>
+      </ul>
+    </div>
+    <div class="input-container ic2" *ngIf="isShowSubsection">
       <input formControlName="subsectionName" id="subsectionName" class="input" type="text" placeholder=" " />
       <div class="cut"></div>
       <label for="subsectionName" class="placeholder">Subsection name</label>
     </div>
     <div class="textarea-container ic2">
-      <!-- <input id="email" class="input" type="text" placeholder=" " /> -->
       <textarea formControlName="content" class="input" name="" id="textarea" cols="30" rows="10" placeholder=" "></textarea>
       <div class="cut"></div>
       <label for="textarea" class="placeholder">Content</label>

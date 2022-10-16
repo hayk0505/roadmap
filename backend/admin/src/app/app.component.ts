@@ -14,6 +14,9 @@ export class AppComponent implements OnInit {
   title = 'admin';
   subsections: Array<any> = [];
   contentNameAndId: Array<Partial<ContentCration>> = [];
+  isOpenDropDawn: boolean = false;
+  isShowSubsection: boolean = false;
+  node: any;
   constructor(
     private http: HttpClient,
   ) { }
@@ -36,10 +39,37 @@ export class AppComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
+      parentId: new FormControl(''),
     });
 
     this.getContentNameAndId().subscribe((data: any) => {
       this.contentNameAndId = data;
+      this.createTreeForMenu(data);
+    })
+  }
+
+  createTreeForMenu(data: any) {
+    const idMapping = data.reduce((acc: any, el: any, i: any) => {
+      acc[el.id] = i;
+      return acc;
+    }, {});
+    data.forEach((el: any) => {
+      if (el.parentId === null) {
+        return;
+      }
+      const parentEl = data[idMapping[el.parentId]];
+      parentEl.children = [...(parentEl.children || []), el];
+    });
+    this.node = this.subsections = data.filter((item: any) => { return item.parentId === null });
+    console.log(this.node);
+  }
+
+  selectFromMenu(id: any): void {
+    let child = document.getElementById(`label${id}`) as HTMLLabelElement;
+    child.classList.remove('hidden')
+    console.log(child.childNodes[1].childNodes[0].childNodes);
+    child.childNodes[1].childNodes[0].childNodes.forEach((item: any) => {
+      item?.classList?.remove('hidden');
     })
   }
   
@@ -73,10 +103,25 @@ export class AppComponent implements OnInit {
     //this.form.patchValue({sectionName: name})
   }
 
-  selectedSectionChange(selected: any, selectedid: any): void {
+  selectedSectionChange(): void {
+    this.isShowSubsection = false;
+  }
+
+  sectionDropDown(): void {
+    this.isOpenDropDawn = !this.isOpenDropDawn;
+  }
+
+  selectedSectionUpdate(selected: any, selectedid: any): void {
     console.log(selectedid);
     console.log(selected);
-    this.form.patchValue({parentId: this.contentNameAndId[selectedid - 1].id});
+    if (!this.contentNameAndId[selectedid - 1]) {
+      return;
+    } else {
+      this.form.patchValue({parentId: this.contentNameAndId[selectedid - 1].id});
+      this.form.patchValue({sectionName: selected});
+      this.sectionDropDown();
+      this.isShowSubsection = true;
+    }
   }
 
   updateProfileInfo(data: ContentCration): Observable<any> {

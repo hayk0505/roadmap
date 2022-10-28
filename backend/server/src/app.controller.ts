@@ -23,7 +23,7 @@ export class AppController {
   @Get(['getContentByName'])
   async getContentByName(): Promise<Content> {
     const res = await this.nameName.findAll({
-      attributes: ['sectionName', 'id']
+      attributes: ['sectionName', 'id', 'parentId']
     });
     return res as any;
   }

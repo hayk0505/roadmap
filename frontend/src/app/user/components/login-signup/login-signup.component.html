@@ -1,0 +1,83 @@
+
+<div class="container">
+  <div class="main">
+    <form *ngIf="user.isRegistered" [formGroup]="signupForm" class="form" (ngSubmit)="onSubmitSignupForm()">
+      <label aria-hidden="true">Sign up</label>
+      <div class="form-group">
+        <input formControlName="username" type="text" name="txt" placeholder="User name"/>
+        <div
+          *ngIf="!fs['username']?.valid && (fs['username']?.dirty || fs['username']?.touched)"
+          class="alert"
+        >
+          <small [hidden]="!fs['username'].value || !fs['username'].errors?.['required']">User name is required</small>
+          <small [hidden]="!fs['username'].errors?.['maxlength'] || fs['username'].errors?.['pattern'].requiredPattern">Max length is 50</small>
+          <!-- <small [hidden]="!fs['username'].value || fs['username'].errors?.['required']">Should contain only alphanumeric characters</small> -->
+         </div>
+      </div>
+      <div class="form-group">
+        <input formControlName="email" type="email" name="email" placeholder="Email"/>
+          <div
+            *ngIf="!fs['email']?.valid && (fs['email']?.dirty || fs['email']?.touched)"
+            class="alert"
+          >
+            <small [hidden]="!fs['email'].value || !fs['email'].errors?.['required']">Email is required</small>
+            <small [hidden]="!fs['email'].errors?.['email']">Please enter valid email</small>
+            <small [hidden]="!fs['email'].errors?.['maxlength']">Max length is 40</small>
+          </div>
+        </div>
+      <div class="form-group">
+        <input formControlName="password" type="password" name="pswd" placeholder="Password"/>
+        <div
+          *ngIf="!fs['password']?.valid && (fs['password']?.dirty || fs['password']?.touched)"
+          class="alert"
+        >
+          <small [hidden]="!fs['password'].value || !fs['password'].errors?.['required']">Password is required</small>
+          <small [hidden]="!fs['password'].errors?.['maxlength']">Max length is 50</small>
+          <small [hidden]="!fs['password'].errors?.['minlength']">Min length is 3</small>
+          <small [hidden]="!fs['password'].errors?.['strong'] || fs['password'].errors?.['required'] || fs['password'].errors?.['minlength']">Password should be a combination of uppercase and lowercase letter and number.</small>
+
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="phone" type="number" name="phone" placeholder="Phone number" min="0"
+        onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"/>
+        <div
+          *ngIf="!fs['phone']?.valid && (fs['phone']?.dirty || fs['phone']?.touched)"
+          class="alert"
+        >
+          <small [hidden]="!fs['phone'].errors?.['maxlength']">Max length is 40</small>
+        </div>
+      </div>
+      <button  type="submit" [disabled]="!signupForm.valid" >Sign up</button>
+    </form>
+
+    <form *ngIf="user.isRegistered" [formGroup]="loginForm" class="form login" (ngSubmit)="onSubmitLoginForm()">
+      <label aria-hidden="true">Log In</label>
+      <div class="form-group">
+        <input formControlName="email" type="email" name="email" placeholder="Email"/>
+          <div
+            *ngIf="!fl['email'].valid && (fl['email'].dirty || fl['email'].touched)"
+            class="alert"
+          >
+            <small [hidden]="!fl['email'].value || !fl['email'].errors?.['required']">Email is required</small>
+            <small [hidden]="!fl['email'].errors?.['email']">Please enter valid email</small>
+            <small [hidden]="!fl['email'].errors?.['maxlength']">Max length is 40</small>
+          </div>
+        </div>
+      <div class="form-group">
+        <input formControlName="password" type="password" name="pswd" placeholder="Password"/>
+        <div
+          *ngIf="!fl['password']?.valid && (fl['password']?.dirty || fl['password']?.touched)"
+          class="alert"
+        >
+          <small [hidden]="!fl['password'].value || !fl['password'].errors?.['required']">Password is required</small>
+          <small [hidden]="!fl['password'].errors?.['maxlength']">Max length is 50</small>
+          <small [hidden]="!fl['password'].errors?.['minlength']">Min length is 3</small>
+          <small [hidden]="!fl['password'].errors?.['strong'] || fl['password'].errors?.['required'] || fl['password'].errors?.['minlength']"> Password should be a combination of uppercase and lowercase letter and number.</small>
+        </div>
+      </div>
+      <button  type="submit" [disabled]="!loginForm.valid">Login</button>
+    </form>
+  </div>
+</div>

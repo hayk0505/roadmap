@@ -7,11 +7,13 @@ import { Content } from './content.entity';
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    @InjectModel(Content) private nameName: typeof Content) {}
+@InjectModel(Content) private nameName: typeof Content) {}
   @Post('create')
   async create(@Body() content: Content): Promise<Content> {
+    if (content.parentId.toString() == '') {
+      content.parentId = null;
+    }
     const res = await this.nameName.create(content);
-    console.log(res)
     return res as any;
   }
   @Get(['getContent'])
@@ -23,7 +25,7 @@ export class AppController {
   @Get(['getContentByName'])
   async getContentByName(): Promise<Content> {
     const res = await this.nameName.findAll({
-      attributes: ['sectionName', 'id', 'parentId']
+      attributes: ['name', 'id', 'parentId']
     });
     return res as any;
   }

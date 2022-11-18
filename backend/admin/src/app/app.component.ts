@@ -12,6 +12,7 @@ import { ContentService } from './shared/services/content/content.service';
 
 export class AppComponent implements OnInit {
   title = 'admin';
+  bindUrl: any;
   subsections: Array<any> = [];
   contentNameAndId: Array<Partial<IContentCreation>> = [];
   isOpenDropDawn: boolean = false;
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
     this.subsections = [ { name: 'dns', parentId: null, childs: [] }, { name: 'ci/cd' },{ name: 'kubernetis' },{ name: 'docker' }];
 
     this.form = new FormGroup({
-      sectionName: new FormControl('', [
+      name: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
       ]),
@@ -108,7 +109,9 @@ export class AppComponent implements OnInit {
   }
 
   sectionDropDown(): void {
-    this.isOpenDropDawn = !this.isOpenDropDawn;
+    if (this.contentNameAndId.length) {
+      this.isOpenDropDawn = !this.isOpenDropDawn;
+    }
   }
 
   selectedSectionUpdate(selected: any, selectedid: any): void {
@@ -118,7 +121,7 @@ export class AppComponent implements OnInit {
       return;
     } else {
       this.form.patchValue({parentId: this.contentNameAndId[selectedid - 1].id});
-      this.form.patchValue({sectionName: selected});
+      this.form.patchValue({name: selected});
       this.sectionDropDown();
       this.isShowSubsection = true;
     }

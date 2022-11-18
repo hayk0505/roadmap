@@ -9,7 +9,7 @@
         <div class="cataloggroup desctop">
           <ul class="cataloggroup-items">
             <li [attr.data-id]="child.id" 
-            [attr.data-name]="child.sectionName"
+            [attr.data-name]="child.name"
             id='label{{child.id}}'
             class="tab-menu m-0"
             (click)="selectFromMenu(child.id)"
@@ -18,10 +18,10 @@
             >
               <label for="radio{{itemindex}}" [ngClass]="{'hasChilds' : child?.children?.length > 0 }" class="m-0">
                 <a class="nestedGroup"
-                  title="{{child.sectionName}}">
-                  {{child.sectionName}}
+                  title="{{child.name}}">
+                  {{child.name}}
                 </a>
-                <i [attr.data-parentId]="child.id" [attr.data-parentName]="child.sectionName" *ngIf="child?.children?.length > 0"
+                <i [attr.data-parentId]="child.id" [attr.data-parentName]="child.name" *ngIf="child?.children?.length > 0"
                   class="fa fa-angle-right" id="{{child.id}}" >
                 </i>
               </label>
@@ -42,21 +42,21 @@
     <div class="input-container ic1">
     </div>
     <div class="input-container ic1 drop-down-container">
-      <input type="text" class="input" placeholder=" " formControlName="sectionName" #selectedSection (change)="selectedSectionChange()">
+      <input type="text" class="input" placeholder=" " formControlName="isShowSubsection ? null : name" #selectedSection (change)="selectedSectionChange()">
       <div class="cut"></div>
       <label for="subsectionName" class="placeholder">Section name</label>
-      <button type="button" class="drop-down-btn" (click)="sectionDropDown()"><i class="fa-solid fa-chevron-down"></i></button>
+      <button type="button" *ngIf="contentNameAndId.length" class="drop-down-btn" (click)="sectionDropDown()"><i class="fa-solid fa-chevron-down"></i></button>
     </div>
     <div class="drop-down" [ngClass]="{'drop-down-open' : isOpenDropDawn }">
       <ul>
         <li 
         *ngFor="let item of contentNameAndId"
         id="{{item.id}}"
-        value="{{item.sectionName}}" (click)="selectedSectionUpdate(item.sectionName, item.id)">{{item.sectionName}}</li>
+        value="{{item.name}}" (click)="selectedSectionUpdate(item.name, item.id)">{{item.name}}</li>
       </ul>
     </div>
     <div class="input-container ic2" *ngIf="isShowSubsection">
-      <input formControlName="subsectionName" id="subsectionName" class="input" type="text" placeholder=" " />
+      <input formControlName="isShowSubsection ? name : null" id="subsectionName" class="input" type="text" placeholder=" " />
       <div class="cut"></div>
       <label for="subsectionName" class="placeholder">Subsection name</label>
     </div>
@@ -68,4 +68,3 @@
     <button type="submit" class="submit">submit</button>
   </form>
 </section>
-

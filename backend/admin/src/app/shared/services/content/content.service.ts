@@ -19,12 +19,12 @@ export class ContentService {
 
   constructor(private dataService: DataService) { }
 
-  updateProfileInfo(data: IContentCreation): Observable<any> {
+  public updateProfileInfo(data: IContentCreation): Observable<any> {
     const url = `${this.apiUrl}/create`;
     return this.dataService.post(url, data, null, this.httpOptions);
   }
 
-  getContentNameAndId(): Observable<Partial<IContentCreation>> {
+  public getContentNameAndId(): Observable<Partial<IContentCreation>> {
     const url = `${this.apiUrl}/getContentByName`;
     return this.dataService.get(url);
   }

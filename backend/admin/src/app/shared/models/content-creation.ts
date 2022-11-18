@@ -1,6 +1,6 @@
 export interface IContentCreation {
   id: number;
-  sectionName: string;
+  name: string;
   subsectionName: string;
   content: string;
   parentId: number;

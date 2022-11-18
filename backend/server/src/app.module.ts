@@ -10,8 +10,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
       dialect: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'front',
-      password: 'frontend1*',
+      username: 'frontend',
+      password: 'Frontend1*',
       database: 'frontend_roadmap',
       models: [Content],
       autoLoadModels: true
